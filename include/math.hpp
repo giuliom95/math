@@ -72,6 +72,15 @@ inline const Vec3h operator/	(const Vec3h& v, const half   f) { return {v[0]/f, 
 inline const half  length		(const Vec3h& v) { return half_float::sqrt(dot(v, v)); }
 inline const Vec3h normalize	(const Vec3h& v) { return (half)(1.0 / length(v))*v; }
 
+inline const Vec3h fromVec3f(const Vec3f& v) { 
+	return
+	{
+		(half_float::half)v[0], 
+		(half_float::half)v[1], 
+		(half_float::half)v[2]
+	}; 
+}
+
 inline std::ostream& operator<<(std::ostream& os, const Vec3h& v) {
 	return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
 }
