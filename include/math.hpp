@@ -13,8 +13,8 @@
 #define INCH_TO_CM 2.54f
 #define MM_TO_CM 0.1f
 
-inline const float max(const float a, const float b) {return a > b ? a : b;}
-inline const float min(const float a, const float b) {return a < b ? a : b;}
+inline float max(const float a, const float b) {return a > b ? a : b;}
+inline float min(const float a, const float b) {return a < b ? a : b;}
 
 using half = half_float::half;
 
@@ -44,14 +44,14 @@ inline std::ostream& operator<<(std::ostream& os, Vec2f& v) {
 	return os << "[" << v[0] << ", " << v[1] << "]";
 }
 
-inline const float dot			(const Vec3f& a, const Vec3f& b) { return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; }
+inline       float dot			(const Vec3f& a, const Vec3f& b) { return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; }
 inline const Vec3f cross		(const Vec3f& a, const Vec3f& b) { return {a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]}; }
 inline const Vec3f operator-	(const Vec3f& a, const Vec3f& b) { return {a[0]-b[0], a[1]-b[1], a[2]-b[2]}; }
 inline const Vec3f operator+	(const Vec3f& a, const Vec3f& b) { return {a[0]+b[0], a[1]+b[1], a[2]+b[2]}; }
 inline const Vec3f operator*	(const Vec3f& a, const Vec3f& b) { return {a[0]*b[0], a[1]*b[1], a[2]*b[2]}; }
 inline const Vec3f operator*	(const float f,  const Vec3f& v) { return {f*v[0], f*v[1], f*v[2]}; }
 inline const Vec3f operator/	(const Vec3f& v, const float f) { return {v[0]/f, v[1]/f, v[2]/f}; }
-inline const float length		(const Vec3f& v) { return std::sqrt(dot(v, v)); }
+inline       float length		(const Vec3f& v) { return std::sqrt(dot(v, v)); }
 inline const Vec3f normalize	(const Vec3f& v) { return (1 / length(v))*v; }
 
 inline std::ostream& operator<<(std::ostream& os, const Vec3f& v) {
@@ -152,7 +152,7 @@ public:
 
 };
 
-inline const float det(const Mat2& m) {
+inline float det(const Mat2& m) {
 	return m[0]*m[3] - m[1]*m[2];
 }
 
@@ -167,7 +167,7 @@ inline const Vec2f operator*(const Mat2& m, const Vec2f& v) {
 
 //////// TRIANGLE ////////
 
-inline const float triarea(const Vec2f p0, const Vec2f p1, const Vec2f p2) {
+inline float triarea(const Vec2f p0, const Vec2f p1, const Vec2f p2) {
 	const auto v01 = p1 - p0;
 	const auto v02 = p2 - p0;
 	return 0.5 * (v01[0]*v02[1] - v01[1]*v02[0]);
