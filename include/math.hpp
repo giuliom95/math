@@ -6,9 +6,11 @@
 #include <iostream>
 
 #include "half.hpp"
+using half = half_float::half;
 
 #define PI 3.141592654f
 #define INV_PI 0.318309886f
+#define PI_OVER_180 0.01745329252f
 
 #define INCH_TO_CM 2.54f
 #define MM_TO_CM 0.1f
@@ -16,7 +18,8 @@
 inline float max(const float a, const float b) {return a > b ? a : b;}
 inline float min(const float a, const float b) {return a < b ? a : b;}
 
-using half = half_float::half;
+inline half max(const half a, const half b) {return a > b ? a : b;}
+inline half min(const half a, const half b) {return a < b ? a : b;}
 
 //////// VECTOR ////////
 
@@ -91,31 +94,46 @@ inline std::ostream& operator<<(std::ostream& os, Vec3h& v) {
 
 //////// MATRIX ////////
 
+// Stored column-wise -- as OpenGL does.
 class Mat4f {
 	std::array<float, 16> data;
 public:
 	Mat4f() : data {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1} {}
 
-	Mat4f(	float a00, float a01, float a02, float a03,
-			float a10, float a11, float a12, float a13,
-			float a20, float a21, float a22, float a23,
-			float a30, float a31, float a32, float a33)
+	Mat4f(	float a00, float a10, float a20, float a30,
+			float a01, float a11, float a21, float a31,
+			float a02, float a12, float a22, float a32,
+			float a03, float a13, float a23, float a33)
 			: data{	a00, a01, a02, a03, a10, a11, a12, a13, 
 					a20, a21, a22, a23, a30, a31, a32, a33} {}
 
+	// This assumes vectors are rows
 	Mat4f(	const Vec3f& x, const Vec3f& y, const Vec3f& z, const Vec3f& w)
-			: data{	x[0], y[0], z[0], w[0],
-					x[1], y[1], z[1], w[1],
-					x[2], y[2], z[2], w[2],
-						0,    0,    0,    1} {}
+			: data{	x[1], y[1], z[1], w[0],
+					x[2], y[2], z[2], w[1],
+					x[3], y[3], z[3], w[2],
+					   0,    0,    0,    1} {}
 
 	const 	float& operator[](int idx) 		const	{ return data[idx]; }
-			float& operator()(int i, int j)			{ return data[i*4+j]; }
-	const 	float& operator()(int i, int j) const	{ return data[i*4+j]; }
+			float& operator()(int i, int j)			{ return data[i+4*j]; }
+	const 	float& operator()(int i, int j) const	{ return data[i+4*j]; }
 };
 
-inline const Vec3f transformPoint	(const Mat4f& m, const Vec3f& p) { return {m(0,0)*p[0] + m(0,1)*p[1] + m(0,2)*p[2] + m(0,3), m(1,0)*p[0] + m(1,1)*p[1] + m(1,2)*p[2] + m(1,3), m(2,0)*p[0] + m(2,1)*p[1] + m(2,2)*p[2] + m(2,3)}; }
-inline const Vec3f transformVector	(const Mat4f& m, const Vec3f& v) { return {m(0,0)*v[0] + m(0,1)*v[1] + m(0,2)*v[2], m(1,0)*v[0] + m(1,1)*v[1] + m(1,2)*v[2], m(2,0)*v[0] + m(2,1)*v[1] + m(2,2)*v[2]}; }
+inline const Vec3f transformPoint(const Mat4f& m, const Vec3f& p) {
+	return {
+		m(0,0)*p[0] + m(1,0)*p[1] + m(2,0)*p[2] + m(3,0), 
+		m(0,1)*p[0] + m(1,1)*p[1] + m(2,1)*p[2] + m(3,1), 
+		m(0,2)*p[0] + m(1,2)*p[1] + m(2,2)*p[2] + m(3,2)
+	};
+}
+
+inline const Vec3f transformVector(const Mat4f& m, const Vec3f& v) { 
+	return {
+		m(0,0)*v[0] + m(1,0)*v[1] + m(2,0)*v[2], 
+		m(0,1)*v[0] + m(1,1)*v[1] + m(2,1)*v[2], 
+		m(0,2)*v[0] + m(1,2)*v[1] + m(2,2)*v[2]
+	};
+}
 
 inline const Mat4f refFromVec (const Vec3f& v) {
 	Vec3f v2{};
@@ -138,28 +156,27 @@ inline const Mat4f transpose (const Mat4f& m) {
 inline const Mat4f operator*(const Mat4f& a, const Mat4f& b)
 {
 	return {
-		a(0,0)*b(0,0) + a(0,1)*b(1,0) + a(0,2)*b(2,0) + a(0,3)*b(3,0),
-		a(0,0)*b(0,1) + a(0,1)*b(1,1) + a(0,2)*b(2,1) + a(0,3)*b(3,1),
-		a(0,0)*b(0,2) + a(0,1)*b(1,2) + a(0,2)*b(2,2) + a(0,3)*b(3,2),
-		a(0,0)*b(0,3) + a(0,1)*b(1,3) + a(0,2)*b(2,3) + a(0,3)*b(3,3),
+		a[0]*b[0]  + a[4]*b[1]  + a[8]*b[2]  + a[12]*b[3],
+		a[0]*b[4]  + a[4]*b[5]  + a[8]*b[6]  + a[12]*b[7],
+		a[0]*b[8]  + a[4]*b[9]  + a[8]*b[10] + a[12]*b[11],
+		a[0]*b[12] + a[4]*b[13] + a[8]*b[14] + a[12]*b[15],
 
-		a(1,0)*b(0,0) + a(1,1)*b(1,0) + a(1,2)*b(2,0) + a(1,3)*b(3,0),
-		a(1,0)*b(0,1) + a(1,1)*b(1,1) + a(1,2)*b(2,1) + a(1,3)*b(3,1),
-		a(1,0)*b(0,2) + a(1,1)*b(1,2) + a(1,2)*b(2,2) + a(1,3)*b(3,2),
-		a(1,0)*b(0,3) + a(1,1)*b(1,3) + a(1,2)*b(2,3) + a(1,3)*b(3,3),
+		a[1]*b[0]  + a[5]*b[1]  + a[9]*b[2]  + a[13]*b[3],
+		a[1]*b[4]  + a[5]*b[5]  + a[9]*b[6]  + a[13]*b[7],
+		a[1]*b[8]  + a[5]*b[9]  + a[9]*b[10] + a[13]*b[11],
+		a[1]*b[12] + a[5]*b[13] + a[9]*b[14] + a[13]*b[15],
 
-		a(2,0)*b(0,0) + a(2,1)*b(1,0) + a(2,2)*b(2,0) + a(2,3)*b(3,0),
-		a(2,0)*b(0,1) + a(2,1)*b(1,1) + a(2,2)*b(2,1) + a(2,3)*b(3,1),
-		a(2,0)*b(0,2) + a(2,1)*b(1,2) + a(2,2)*b(2,2) + a(2,3)*b(3,2),
-		a(2,0)*b(0,3) + a(2,1)*b(1,3) + a(2,2)*b(2,3) + a(2,3)*b(3,3),
+		a[2]*b[0]  + a[6]*b[1]  + a[10]*b[2]  + a[14]*b[3],
+		a[2]*b[4]  + a[6]*b[5]  + a[10]*b[6]  + a[14]*b[7],
+		a[2]*b[8]  + a[6]*b[9]  + a[10]*b[10] + a[14]*b[11],
+		a[2]*b[12] + a[6]*b[13] + a[10]*b[14] + a[14]*b[15],
 
-		a(3,0)*b(0,0) + a(3,1)*b(1,0) + a(3,2)*b(2,0) + a(3,3)*b(3,0),
-		a(3,0)*b(0,1) + a(3,1)*b(1,1) + a(3,2)*b(2,1) + a(3,3)*b(3,1),
-		a(3,0)*b(0,2) + a(3,1)*b(1,2) + a(3,2)*b(2,2) + a(3,3)*b(3,2),
-		a(3,0)*b(0,3) + a(3,1)*b(1,3) + a(3,2)*b(2,3) + a(3,3)*b(3,3)
+		a[3]*b[0]  + a[7]*b[1]  + a[11]*b[2]  + a[15]*b[3],
+		a[3]*b[4]  + a[7]*b[5]  + a[11]*b[6]  + a[15]*b[7],
+		a[3]*b[8]  + a[7]*b[9]  + a[11]*b[10] + a[15]*b[11],
+		a[3]*b[12] + a[7]*b[13] + a[11]*b[14] + a[15]*b[15]
 	};
 }
-
 
 class Mat2 {
 	std::array<float, 4> data;
