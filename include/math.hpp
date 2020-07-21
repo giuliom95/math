@@ -78,9 +78,18 @@ inline const Vec3h normalize	(const Vec3h& v) { return (half)(1.0 / length(v))*v
 inline const Vec3h fromVec3f(const Vec3f& v) { 
 	return
 	{
-		(half_float::half)v[0], 
-		(half_float::half)v[1], 
-		(half_float::half)v[2]
+		(half)v[0], 
+		(half)v[1], 
+		(half)v[2]
+	}; 
+}
+
+inline const Vec3f fromVec3h(const Vec3h& v) { 
+	return
+	{
+		(float)v[0], 
+		(float)v[1], 
+		(float)v[2]
 	}; 
 }
 
@@ -217,6 +226,5 @@ inline float triarea(const Vec2f p0, const Vec2f p1, const Vec2f p2) {
 	const auto v02 = p2 - p0;
 	return 0.5 * (v01[0]*v02[1] - v01[1]*v02[0]);
 }
-
 
 #endif
