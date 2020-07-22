@@ -15,11 +15,11 @@ using half = half_float::half;
 #define INCH_TO_CM 2.54f
 #define MM_TO_CM 0.1f
 
-inline float max(const float a, const float b) {return a > b ? a : b;}
-inline float min(const float a, const float b) {return a < b ? a : b;}
+float max(const float a, const float b) {return a > b ? a : b;}
+float min(const float a, const float b) {return a < b ? a : b;}
 
-inline half max(const half a, const half b) {return a > b ? a : b;}
-inline half min(const half a, const half b) {return a < b ? a : b;}
+half max(const half a, const half b) {return a > b ? a : b;}
+half min(const half a, const half b) {return a < b ? a : b;}
 
 //////// VECTOR ////////
 
@@ -29,53 +29,41 @@ using Vec3i = std::array<int, 3>;
 using Vec3f = std::array<float, 3>;
 using Vec3h = std::array<half, 3>;
 
-inline const Vec2f operator*	(const float f, const Vec2f v) { return {f*v[0], f*v[1]}; }
-inline const Vec2f operator*	(const Vec2f v, const float f) { return {f*v[0], f*v[1]}; }
-inline const Vec2f operator+	(const Vec2f a, const Vec2f b) { return {a[0]+b[0], a[1]+b[1]}; }
-inline const Vec2f operator+	(const Vec2f v, const float f) { return {v[0]+f, v[1]+f}; }
-inline const Vec2f operator-	(const Vec2f a, const Vec2f b) { return {a[0]-b[0], a[1]-b[1]}; }
-inline const Vec2f operator-	(const Vec2f v, const float f) { return {v[0]-f, v[1]-f}; }
-inline const Vec2f operator*	(const Vec2f a, const Vec2f b) { return {a[0]*b[0], a[1]*b[1]}; }
-inline const Vec2f operator/	(const Vec2f a, const Vec2f b) { return {a[0]/b[0], a[1]/b[1]}; }
-inline const Vec2f operator/	(const Vec2f v, const float f) { return {v[0]/f, v[1]/f}; }
+const Vec2f operator*	(const float f, const Vec2f v) { return {f*v[0], f*v[1]}; }
+const Vec2f operator*	(const Vec2f v, const float f) { return {f*v[0], f*v[1]}; }
+const Vec2f operator+	(const Vec2f a, const Vec2f b) { return {a[0]+b[0], a[1]+b[1]}; }
+const Vec2f operator+	(const Vec2f v, const float f) { return {v[0]+f, v[1]+f}; }
+const Vec2f operator-	(const Vec2f a, const Vec2f b) { return {a[0]-b[0], a[1]-b[1]}; }
+const Vec2f operator-	(const Vec2f v, const float f) { return {v[0]-f, v[1]-f}; }
+const Vec2f operator*	(const Vec2f a, const Vec2f b) { return {a[0]*b[0], a[1]*b[1]}; }
+const Vec2f operator/	(const Vec2f a, const Vec2f b) { return {a[0]/b[0], a[1]/b[1]}; }
+const Vec2f operator/	(const Vec2f v, const float f) { return {v[0]/f, v[1]/f}; }
 
-inline std::ostream& operator<<(std::ostream& os, const Vec2f& v) {
-	return os << "[" << v[0] << ", " << v[1] << "]";
-}
+      float dot			(const Vec3f& a, const Vec3f& b) { return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; }
+const Vec3f cross		(const Vec3f& a, const Vec3f& b) { return {a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]}; }
+const Vec3f operator-	(const Vec3f& a, const Vec3f& b) { return {a[0]-b[0], a[1]-b[1], a[2]-b[2]}; }
+const Vec3f operator+	(const Vec3f& a, const Vec3f& b) { return {a[0]+b[0], a[1]+b[1], a[2]+b[2]}; }
+const Vec3f operator*	(const Vec3f& a, const Vec3f& b) { return {a[0]*b[0], a[1]*b[1], a[2]*b[2]}; }
+const Vec3f operator*	(const float f,  const Vec3f& v) { return {f*v[0], f*v[1], f*v[2]}; }
+const Vec3f operator/	(const Vec3f& v, const float f) { return {v[0]/f, v[1]/f, v[2]/f}; }
+      float length		(const Vec3f& v) { return std::sqrt(dot(v, v)); }
+const Vec3f normalize	(const Vec3f& v) { return (1 / length(v))*v; }
 
-inline std::ostream& operator<<(std::ostream& os, Vec2f& v) {
-	return os << "[" << v[0] << ", " << v[1] << "]";
-}
+const Vec3f veci{1,0,0};
+const Vec3f vecj{0,1,0};
+const Vec3f veck{0,0,1};
 
-inline       float dot			(const Vec3f& a, const Vec3f& b) { return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; }
-inline const Vec3f cross		(const Vec3f& a, const Vec3f& b) { return {a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]}; }
-inline const Vec3f operator-	(const Vec3f& a, const Vec3f& b) { return {a[0]-b[0], a[1]-b[1], a[2]-b[2]}; }
-inline const Vec3f operator+	(const Vec3f& a, const Vec3f& b) { return {a[0]+b[0], a[1]+b[1], a[2]+b[2]}; }
-inline const Vec3f operator*	(const Vec3f& a, const Vec3f& b) { return {a[0]*b[0], a[1]*b[1], a[2]*b[2]}; }
-inline const Vec3f operator*	(const float f,  const Vec3f& v) { return {f*v[0], f*v[1], f*v[2]}; }
-inline const Vec3f operator/	(const Vec3f& v, const float f) { return {v[0]/f, v[1]/f, v[2]/f}; }
-inline       float length		(const Vec3f& v) { return std::sqrt(dot(v, v)); }
-inline const Vec3f normalize	(const Vec3f& v) { return (1 / length(v))*v; }
+const half  dot			(const Vec3h& a, const Vec3h& b) { return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; }
+const Vec3h cross		(const Vec3h& a, const Vec3h& b) { return {a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]}; }
+const Vec3h operator-	(const Vec3h& a, const Vec3h& b) { return {a[0]-b[0], a[1]-b[1], a[2]-b[2]}; }
+const Vec3h operator+	(const Vec3h& a, const Vec3h& b) { return {a[0]+b[0], a[1]+b[1], a[2]+b[2]}; }
+const Vec3h operator*	(const Vec3h& a, const Vec3h& b) { return {a[0]*b[0], a[1]*b[1], a[2]*b[2]}; }
+const Vec3h operator*	(const half f,   const Vec3h& v) { return {f*v[0], f*v[1], f*v[2]}; }
+const Vec3h operator/	(const Vec3h& v, const half   f) { return {v[0]/f, v[1]/f, v[2]/f}; }
+const half  length		(const Vec3h& v) { return half_float::sqrt(dot(v, v)); }
+const Vec3h normalize	(const Vec3h& v) { return (half)(1.0 / length(v))*v; }
 
-inline std::ostream& operator<<(std::ostream& os, const Vec3f& v) {
-	return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
-}
-
-inline std::ostream& operator<<(std::ostream& os, Vec3f& v) {
-	return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
-}
-
-inline const half  dot			(const Vec3h& a, const Vec3h& b) { return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; }
-inline const Vec3h cross		(const Vec3h& a, const Vec3h& b) { return {a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]}; }
-inline const Vec3h operator-	(const Vec3h& a, const Vec3h& b) { return {a[0]-b[0], a[1]-b[1], a[2]-b[2]}; }
-inline const Vec3h operator+	(const Vec3h& a, const Vec3h& b) { return {a[0]+b[0], a[1]+b[1], a[2]+b[2]}; }
-inline const Vec3h operator*	(const Vec3h& a, const Vec3h& b) { return {a[0]*b[0], a[1]*b[1], a[2]*b[2]}; }
-inline const Vec3h operator*	(const half f,   const Vec3h& v) { return {f*v[0], f*v[1], f*v[2]}; }
-inline const Vec3h operator/	(const Vec3h& v, const half   f) { return {v[0]/f, v[1]/f, v[2]/f}; }
-inline const half  length		(const Vec3h& v) { return half_float::sqrt(dot(v, v)); }
-inline const Vec3h normalize	(const Vec3h& v) { return (half)(1.0 / length(v))*v; }
-
-inline const Vec3h fromVec3f(const Vec3f& v) { 
+const Vec3h fromVec3f(const Vec3f& v) { 
 	return
 	{
 		(half)v[0], 
@@ -84,7 +72,7 @@ inline const Vec3h fromVec3f(const Vec3f& v) {
 	}; 
 }
 
-inline const Vec3f fromVec3h(const Vec3h& v) { 
+const Vec3f fromVec3h(const Vec3h& v) { 
 	return
 	{
 		(float)v[0], 
@@ -93,13 +81,34 @@ inline const Vec3f fromVec3h(const Vec3h& v) {
 	}; 
 }
 
-inline std::ostream& operator<<(std::ostream& os, const Vec3h& v) {
-	return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
+//////// LOGGERS ////////
+
+namespace std {
+	std::ostream& operator<<(std::ostream& os, const Vec2f& v) {
+		return os << "[" << v[0] << ", " << v[1] << "]";
+	}
+
+	std::ostream& operator<<(std::ostream& os, Vec2f& v) {
+		return os << "[" << v[0] << ", " << v[1] << "]";
+	}
+
+	std::ostream& operator<<(std::ostream& os, const Vec3f& v) {
+		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
+	}
+
+	ostream& operator<<(ostream& os, Vec3f& v) {
+		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
+	}
+
+	std::ostream& operator<<(std::ostream& os, const Vec3h& v) {
+		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
+	}
+
+	std::ostream& operator<<(std::ostream& os, Vec3h& v) {
+		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
+	}
 }
 
-inline std::ostream& operator<<(std::ostream& os, Vec3h& v) {
-	return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
-}
 
 //////// MATRIX ////////
 
@@ -130,7 +139,7 @@ public:
 	const 	float& operator()(int i, int j) const	{ return data[i+4*j]; }
 };
 
-inline const Vec3f transformPoint(const Mat4f& m, const Vec3f& p) {
+const Vec3f transformPoint(const Mat4f& m, const Vec3f& p) {
 	return {
 		m(0,0)*p[0] + m(1,0)*p[1] + m(2,0)*p[2] + m(3,0), 
 		m(0,1)*p[0] + m(1,1)*p[1] + m(2,1)*p[2] + m(3,1), 
@@ -138,7 +147,7 @@ inline const Vec3f transformPoint(const Mat4f& m, const Vec3f& p) {
 	};
 }
 
-inline const Vec3f transformVector(const Mat4f& m, const Vec3f& v) { 
+const Vec3f transformVector(const Mat4f& m, const Vec3f& v) { 
 	return {
 		m(0,0)*v[0] + m(1,0)*v[1] + m(2,0)*v[2], 
 		m(0,1)*v[0] + m(1,1)*v[1] + m(2,1)*v[2], 
@@ -146,7 +155,7 @@ inline const Vec3f transformVector(const Mat4f& m, const Vec3f& v) {
 	};
 }
 
-inline const Mat4f refFromVec (const Vec3f& v) {
+const Mat4f refFromVec (const Vec3f& v) {
 	Vec3f v2{};
 	if (std::abs(v[0]) > std::abs(v[1]))
 		v2 = Vec3f{-v[2], 0, v[0]} / std::sqrt(v[0] * v[0] + v[2] * v[2]);
@@ -157,14 +166,14 @@ inline const Mat4f refFromVec (const Vec3f& v) {
 	return {v, v2, v3, {}};
 }
 
-inline const Mat4f transpose (const Mat4f& m) {
+const Mat4f transpose (const Mat4f& m) {
 	return {	m[0], m[4],  m[8], m[12],
 				m[1], m[5],  m[9], m[13],
 				m[2], m[6], m[10], m[14],
 				m[3], m[7], m[11], m[15]};
 }
 
-inline const Mat4f operator*(const Mat4f& a, const Mat4f& b)
+const Mat4f operator*(const Mat4f& a, const Mat4f& b)
 {
 	return {
 		a[0]*b[0]  + a[4]*b[1]  + a[8]*b[2]  + a[12]*b[3],
@@ -189,7 +198,7 @@ inline const Mat4f operator*(const Mat4f& a, const Mat4f& b)
 	};
 }
 
-inline const Mat4f operator*(const float f, const Mat4f& m) {
+const Mat4f operator*(const float f, const Mat4f& m) {
 	return {
 		 f * m[0],  f * m[1],  f * m[2],  f * m[3],
 		 f * m[4],  f * m[5],  f * m[6],  f * m[7],
@@ -198,10 +207,13 @@ inline const Mat4f operator*(const float f, const Mat4f& m) {
 	};
 }
 
-inline const Mat4f operator*(const Mat4f& m, const float f) {
+const Mat4f operator*(const Mat4f& m, const float f) {
 	return f*m;
 }
 
+const Mat4f translationMatrix(Vec3f pos) {
+	return {veci, vecj, veck, pos};
+}
 
 class Mat2 {
 	std::array<float, 4> data;
@@ -220,22 +232,22 @@ public:
 
 };
 
-inline float det(const Mat2& m) {
+float det(const Mat2& m) {
 	return m[0]*m[3] - m[1]*m[2];
 }
 
-inline const Mat2 inv(const Mat2& m) {
+const Mat2 inv(const Mat2& m) {
 	return Mat2(m[3],-m[1], -m[2],m[0]) * (1 / det(m));
 }
 
-inline const Vec2f operator*(const Mat2& m, const Vec2f& v) {
+const Vec2f operator*(const Mat2& m, const Vec2f& v) {
 	return {m[0]*v[0] + m[1]*v[1],
 			m[2]*v[0] + m[3]*v[1]};
 } 
 
 //////// TRIANGLE ////////
 
-inline float triarea(const Vec2f p0, const Vec2f p1, const Vec2f p2) {
+float triarea(const Vec2f p0, const Vec2f p1, const Vec2f p2) {
 	const auto v01 = p1 - p0;
 	const auto v02 = p2 - p0;
 	return 0.5 * (v01[0]*v02[1] - v01[1]*v02[0]);
