@@ -189,6 +189,20 @@ inline const Mat4f operator*(const Mat4f& a, const Mat4f& b)
 	};
 }
 
+inline const Mat4f operator*(const float f, const Mat4f& m) {
+	return {
+		 f * m[0],  f * m[1],  f * m[2],  f * m[3],
+		 f * m[4],  f * m[5],  f * m[6],  f * m[7],
+		 f * m[8],  f * m[9], f * m[10], f * m[11],
+		f * m[12], f * m[13], f * m[14], f * m[15]
+	};
+}
+
+inline const Mat4f operator*(const Mat4f& m, const float f) {
+	return f*m;
+}
+
+
 class Mat2 {
 	std::array<float, 4> data;
 public:
