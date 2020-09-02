@@ -11,6 +11,7 @@ using half = half_float::half;
 #define PI 3.141592654f
 #define INV_PI 0.318309886f
 #define PI_OVER_180 0.01745329252f
+#define RAD_TO_DEG 57.295779513f
 
 #define INCH_TO_CM 2.54f
 #define MM_TO_CM 0.1f
