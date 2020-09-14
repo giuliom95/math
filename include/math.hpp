@@ -41,6 +41,16 @@ inline const Vec2f operator*	(const Vec2f a, const Vec2f b) { return {a[0]*b[0],
 inline const Vec2f operator/	(const Vec2f a, const Vec2f b) { return {a[0]/b[0], a[1]/b[1]}; }
 inline const Vec2f operator/	(const Vec2f v, const float f) { return {v[0]/f, v[1]/f}; }
 
+inline const Vec2h operator*	(const half  f, const Vec2h v) { return {f*v[0], f*v[1]}; }
+inline const Vec2h operator*	(const Vec2h v, const half  f) { return {f*v[0], f*v[1]}; }
+inline const Vec2h operator+	(const Vec2h a, const Vec2h b) { return {a[0]+b[0], a[1]+b[1]}; }
+inline const Vec2h operator+	(const Vec2h v, const half  f) { return {v[0]+f, v[1]+f}; }
+inline const Vec2h operator-	(const Vec2h a, const Vec2h b) { return {a[0]-b[0], a[1]-b[1]}; }
+inline const Vec2h operator-	(const Vec2h v, const half  f) { return {v[0]-f, v[1]-f}; }
+inline const Vec2h operator*	(const Vec2h a, const Vec2h b) { return {a[0]*b[0], a[1]*b[1]}; }
+inline const Vec2h operator/	(const Vec2h a, const Vec2h b) { return {a[0]/b[0], a[1]/b[1]}; }
+inline const Vec2h operator/	(const Vec2h v, const half  f) { return {v[0]/f, v[1]/f}; }
+
 inline       float dot			(const Vec3f& a, const Vec3f& b) { return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; }
 inline const Vec3f cross		(const Vec3f& a, const Vec3f& b) { return {a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]}; }
 inline const Vec3f operator-	(const Vec3f& a, const Vec3f& b) { return {a[0]-b[0], a[1]-b[1], a[2]-b[2]}; }
