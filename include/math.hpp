@@ -26,6 +26,7 @@ inline half min(const half a, const half b) {return a < b ? a : b;}
 
 using Vec2i = std::array<int, 2>;
 using Vec2f = std::array<float, 2>;
+using Vec2h = std::array<half, 2>;
 using Vec3i = std::array<int, 3>;
 using Vec3f = std::array<float, 3>;
 using Vec3h = std::array<half, 3>;
@@ -64,22 +65,20 @@ inline const Vec3h operator/	(const Vec3h& v, const half   f) { return {v[0]/f, 
 inline const half  length		(const Vec3h& v) { return half_float::sqrt(dot(v, v)); }
 inline const Vec3h normalize	(const Vec3h& v) { return (half)(1.0 / length(v))*v; }
 
+inline const Vec2h fromVec2f(const Vec2f& v) { 
+	return {(half)v[0], (half)v[1]}; 
+}
+
+inline const Vec2f fromVec2h(const Vec2h& v) { 
+	return {(float)v[0], (float)v[1]}; 
+}
+
 inline const Vec3h fromVec3f(const Vec3f& v) { 
-	return
-	{
-		(half)v[0], 
-		(half)v[1], 
-		(half)v[2]
-	}; 
+	return {(half)v[0], (half)v[1], (half)v[2]}; 
 }
 
 inline const Vec3f fromVec3h(const Vec3h& v) { 
-	return
-	{
-		(float)v[0], 
-		(float)v[1], 
-		(float)v[2]
-	}; 
+	return {(float)v[0], (float)v[1], (float)v[2]}; 
 }
 
 //////// LOGGERS ////////
