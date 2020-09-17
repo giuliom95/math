@@ -94,18 +94,30 @@ inline const Vec3f fromVec3h(const Vec3h& v) {
 //////// LOGGERS ////////
 
 namespace std {
-	inline std::ostream& operator<<(std::ostream& os, const Vec2f& v) {
+	inline std::ostream& operator<<(std::ostream& os, const Vec2i& v) {
+		return os << "[" << v[0] << ", " << v[1] << "]";
+	}
+	inline std::ostream& operator<<(std::ostream& os, Vec2i& v) {
 		return os << "[" << v[0] << ", " << v[1] << "]";
 	}
 
+	inline std::ostream& operator<<(std::ostream& os, const Vec2f& v) {
+		return os << "[" << v[0] << ", " << v[1] << "]";
+	}
 	inline std::ostream& operator<<(std::ostream& os, Vec2f& v) {
 		return os << "[" << v[0] << ", " << v[1] << "]";
+	}
+
+	inline std::ostream& operator<<(std::ostream& os, const Vec3i& v) {
+		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
+	}
+	inline ostream& operator<<(ostream& os, Vec3i& v) {
+		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
 	}
 
 	inline std::ostream& operator<<(std::ostream& os, const Vec3f& v) {
 		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
 	}
-
 	inline ostream& operator<<(ostream& os, Vec3f& v) {
 		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
 	}
@@ -113,7 +125,6 @@ namespace std {
 	inline std::ostream& operator<<(std::ostream& os, const Vec3h& v) {
 		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
 	}
-
 	inline std::ostream& operator<<(std::ostream& os, Vec3h& v) {
 		return os << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]";
 	}
