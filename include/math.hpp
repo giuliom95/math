@@ -40,6 +40,7 @@ inline const Vec2f operator-	(const Vec2f v, const float f) { return {v[0]-f, v[
 inline const Vec2f operator*	(const Vec2f a, const Vec2f b) { return {a[0]*b[0], a[1]*b[1]}; }
 inline const Vec2f operator/	(const Vec2f a, const Vec2f b) { return {a[0]/b[0], a[1]/b[1]}; }
 inline const Vec2f operator/	(const Vec2f v, const float f) { return {v[0]/f, v[1]/f}; }
+inline const Vec2f roundv		(const Vec2f v) { return {roundf(v[0]), roundf(v[1])}; }
 
 inline const Vec2h operator*	(const half  f, const Vec2h v) { return {f*v[0], f*v[1]}; }
 inline const Vec2h operator*	(const Vec2h v, const half  f) { return {f*v[0], f*v[1]}; }
